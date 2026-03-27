@@ -1,6 +1,7 @@
 # Dryer Plugin for ZMOD (Klipper)
 
 This project provides Klipper macros for drying filament using the printer's heated bed.
+This plugin is intended for the Flashforge AD5X printer with ZMod firmware installed: https://github.com/ghzserg/zmod
 
 Macros are defined in `dryer.cfg` and provide:
 - material/time-based drying start,
@@ -24,7 +25,7 @@ channel: dev
 path: /root/printer_data/config/mod_data/plugins/dryer
 origin: https://github.com/pantata/dryer.git
 is_system_service: False
-primary_branch: main
+primary_branch: master
 ```
 
 - Plugin path: `/root/printer_data/config/mod_data/plugins/dryer`
@@ -34,6 +35,19 @@ primary_branch: main
 
 Enable plugin: `ENABLE_PLUGIN name=dryer`
 Disable plugin: `DISABLE_PLUGIN name=dryer`
+
+## Alternative Installation (without plugin)
+
+If you do not want plugin-based installation, you can use a plain include setup:
+
+1. Copy `dryer.cfg` to `mod_data` (typically `/root/printer_data/config/mod_data/`).
+2. Add this to `user.cfg`:
+
+```ini
+[include dryer.cfg]
+```
+
+3. Restart Klipper (`RESTART` or `FIRMWARE_RESTART`).
 
 ## Macro Usage
 

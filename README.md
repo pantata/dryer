@@ -1,6 +1,7 @@
 # Dryer plugin pro ZMOD (Klipper)
 
 Tento projekt obsahuje Klipper makra pro sušení filamentu pomocí vyhřívané podložky.
+Plugin je určen pro tiskárnu Flashforge AD5X s nainstalovaným firmwarem ZMod: https://github.com/ghzserg/zmod
 
 Makra jsou v souboru `dryer.cfg` a poskytují:
 - spuštění sušení podle materiálu a času,
@@ -24,7 +25,7 @@ channel: dev
 path: /root/printer_data/config/mod_data/plugins/dryer
 origin: https://github.com/pantata/dryer.git
 is_system_service: False
-primary_branch: main
+primary_branch: master
 ```
 
 - Plugin path: `/root/printer_data/config/mod_data/plugins/dryer`
@@ -36,6 +37,18 @@ primary_branch: main
 Povolení pluginu: `ENABLE_PLUGIN name=dryer`
 Zakázání pluginu: `DISABLE_PLUGIN name=dryer`
 
+## Alternativní instalace (bez pluginu)
+
+Pokud nechceš instalaci přes plugin, můžeš použít jen include konfigurace:
+
+1. Zkopíruj `dryer.cfg` do `mod_data` (typicky do `/root/printer_data/config/mod_data/`).
+2. Do `user.cfg` přidej:
+
+```ini
+[include dryer.cfg]
+```
+
+3. Proveď restart Klipperu (`RESTART` nebo `FIRMWARE_RESTART`).
 
 ## Použití maker
 
