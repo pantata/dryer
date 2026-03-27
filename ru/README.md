@@ -1,0 +1,100 @@
+# Плагин Dryer для ZMOD (Klipper)
+
+Этот проект предоставляет макросы Klipper для сушки филамента с использованием нагреваемого стола принтера.
+Плагин предназначен для принтера Flashforge AD5X с установленной прошивкой ZMod: https://github.com/ghzserg/zmod
+
+Макросы определены в `dryer.cfg` и предоставляют:
+- запуск сушки по материалу и времени,
+- отслеживание обратного отсчета в реальном времени,
+- проверку состояния,
+- безопасное завершение процесса,
+- необязательные уведомления через `RESPOND PREFIX="tgalarm"`.
+
+## Установка как плагина ZMOD
+
+Используйте следующую процедуру для установки плагина в ZMOD.
+
+### 1) Добавьте плагин в `mod_data/user.moonraker.conf`
+
+Добавьте этот раздел:
+
+```ini
+[update_manager dryer]
+type: git_repo
+channel: dev
+path: /root/printer_data/config/mod_data/plugins/dryer
+origin: https://github.com/pantata/dryer.git
+is_system_service: False
+primary_branch: master
+```
+
+- Путь плагина: `/root/printer_data/config/mod_data/plugins/dryer`
+- Источник: `https://github.com/pantata/dryer.git`
+
+### 2) Включение/отключение lifecycle-скриптов
+
+Включить плагин: `ENABLE_PLUGIN name=dryer`
+Отключить плагин: `DISABLE_PLUGIN name=dryer`
+
+## Альтернативная установка (без плагина)
+
+Если вы не хотите использовать установку через плагин, можно применить обычную include-конфигурацию:
+
+1. Скопируйте `dryer.cfg` в `mod_data` (обычно `/root/printer_data/config/mod_data/`).
+2. Добавьте в `user.cfg` следующее:
+
+```ini
+[include dryer.cfg]
+```
+
+3. Перезапустите Klipper (`RESTART` или `FIRMWARE_RESTART`).
+
+## Использование макросов
+
+### Запуск сушки
+
+```gcode
+START_DRYING MATERIAL=PLA TIME=4
+```
+
+### Проверка статуса сушки
+
+```gcode
+DRYING_STATUS
+```
+
+### Остановка сушки
+
+```gcode
+STOP_DRYING
+```
+
+## Поддерживаемые материалы и температуры по умолчанию
+
+- `PLA`: 45 °C
+- `PETG`: 65 °C
+- `TPU`: 50 °C
+- `ABS`: 80 °C
+
+Если указан неизвестный материал, используется резервная температура `45 °C`.
+
+## Сокращения
+
+- `DRY_PLA` -> `START_DRYING MATERIAL=PLA TIME=4`
+- `DRY_PETG` -> `START_DRYING MATERIAL=PETG TIME=4`
+- `DRY_TPU` -> `START_DRYING MATERIAL=TPU TIME=6`
+- `DRY_ABS` -> `START_DRYING MATERIAL=ABS TIME=6`
+
+## Логика безопасности
+
+Макросы включают базовые проверки:
+- не запускать, если сушка уже идет,
+- не запускать, если стол уже используется,
+- автоматически выключать нагрев в конце,
+- восстанавливать предыдущее значение `idle_timeout`.
+
+## Рекомендации
+
+- Сушите филамент только под присмотром и в безопасной среде.
+- Убедитесь, что температура подходит для конкретной марки филамента.
+- Для чувствительных материалов начинайте с меньшего времени и при необходимости корректируйте.

@@ -1,22 +1,22 @@
-# Dryer plugin pro ZMOD (Klipper)
+# Dryer Plugin for ZMOD (Klipper)
 
-Tento projekt obsahuje Klipper makra pro sušení filamentu pomocí vyhřívané podložky.
-Plugin je určen pro tiskárnu Flashforge AD5X s nainstalovaným firmwarem ZMod: https://github.com/ghzserg/zmod
+This project provides Klipper macros for drying filament using the printer's heated bed.
+This plugin is intended for the Flashforge AD5X printer with ZMod firmware installed: https://github.com/ghzserg/zmod
 
-Makra jsou v souboru `dryer.cfg` a poskytují:
-- spuštění sušení podle materiálu a času,
-- průběžné odpočítávání,
-- kontrolu stavu,
-- bezpečné ukončení procesu,
-- volitelné notifikace přes `RESPOND PREFIX="tgalarm"`.
+Macros are defined in `dryer.cfg` and provide:
+- material/time-based drying start,
+- live countdown tracking,
+- status reporting,
+- safe process shutdown,
+- optional notifications via `RESPOND PREFIX="tgalarm"`.
 
-## Instalace jako ZMOD plugin
+## Installation as a ZMOD Plugin
 
-Níže je správný postup pro instalaci pluginu v ZMOD.
+Use the following procedure to install the plugin in ZMOD.
 
-### 1) Přidej plugin do `mod_data/user.moonraker.conf`
+### 1) Add the plugin to `mod_data/user.moonraker.conf`
 
-Vlož sekci:
+Add this section:
 
 ```ini
 [update_manager dryer]
@@ -31,71 +31,70 @@ primary_branch: master
 - Plugin path: `/root/printer_data/config/mod_data/plugins/dryer`
 - Source: `https://github.com/pantata/dryer.git`
 
+### 2) Enable/Disable lifecycle scripts
 
-### 2) Enable/Disable lifecycle skripty
+Enable plugin: `ENABLE_PLUGIN name=dryer`
+Disable plugin: `DISABLE_PLUGIN name=dryer`
 
-Povolení pluginu: `ENABLE_PLUGIN name=dryer`
-Zakázání pluginu: `DISABLE_PLUGIN name=dryer`
+## Alternative Installation (without plugin)
 
-## Alternativní instalace (bez pluginu)
+If you do not want plugin-based installation, you can use a plain include setup:
 
-Pokud nechceš instalaci přes plugin, můžeš použít jen include konfigurace:
-
-1. Zkopíruj `dryer.cfg` do `mod_data` (typicky do `/root/printer_data/config/mod_data/`).
-2. Do `user.cfg` přidej:
+1. Copy `dryer.cfg` to `mod_data` (typically `/root/printer_data/config/mod_data/`).
+2. Add this to `user.cfg`:
 
 ```ini
 [include dryer.cfg]
 ```
 
-3. Proveď restart Klipperu (`RESTART` nebo `FIRMWARE_RESTART`).
+3. Restart Klipper (`RESTART` or `FIRMWARE_RESTART`).
 
-## Použití maker
+## Macro Usage
 
-### Spuštění sušení
+### Start drying
 
 ```gcode
 START_DRYING MATERIAL=PLA TIME=4
 ```
 
-### Stav sušení
+### Check drying status
 
 ```gcode
 DRYING_STATUS
 ```
 
-### Zastavení sušení
+### Stop drying
 
 ```gcode
 STOP_DRYING
 ```
 
-## Podporované materiály a výchozí teploty
+## Supported Materials and Default Temperatures
 
 - `PLA`: 45 °C
 - `PETG`: 65 °C
 - `TPU`: 50 °C
 - `ABS`: 80 °C
 
-Pokud zadáš neznámý materiál, použije se fallback teplota `45 °C`.
+If an unknown material is provided, the fallback temperature is `45 °C`.
 
-## Zkratky
+## Shortcuts
 
 - `DRY_PLA` -> `START_DRYING MATERIAL=PLA TIME=4`
 - `DRY_PETG` -> `START_DRYING MATERIAL=PETG TIME=4`
 - `DRY_TPU` -> `START_DRYING MATERIAL=TPU TIME=6`
 - `DRY_ABS` -> `START_DRYING MATERIAL=ABS TIME=6`
 
-## Bezpečnost logiky
+## Safety Logic
 
-Makra obsahují základní ochrany:
-- nespustí nové sušení, pokud už běží,
-- nespustí sušení, pokud je podložka už aktivně používaná,
-- po dokončení automaticky vypnou topení,
-- vrátí původní `idle_timeout`.
+The macros include basic protection checks:
+- do not start if drying is already running,
+- do not start if the bed is already in use,
+- automatically turn heating off at the end,
+- restore the previous `idle_timeout` value.
 
-## Doporučení
+## Recommendations
 
-- Suš filament pouze pod dohledem a v bezpečném prostředí.
-- Ověř, že zvolená teplota je vhodná pro konkrétní značku materiálu.
-- U citlivých materiálů začni kratším časem a uprav podle výsledku.
+- Dry filament only under supervision and in a safe environment.
+- Verify temperature suitability for your specific filament brand.
+- For sensitive materials, start with shorter times and adjust as needed.
