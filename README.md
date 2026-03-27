@@ -1,23 +1,61 @@
-# Dryer macros pro Klipper
+# Dryer plugin pro ZMOD (Klipper)
 
-Tento projekt obsahuje sadu Klipper macro příkazů pro sušení filamentu pomocí vyhřívané podložky tiskárny.
+Tento projekt obsahuje Klipper makra pro sušení filamentu pomocí vyhřívané podložky.
 
-Konfigurace je v souboru `dryer.cfg` a přidává:
+Makra jsou v souboru `dryer.cfg` a poskytují:
 - spuštění sušení podle materiálu a času,
 - průběžné odpočítávání,
-- zobrazení stavu,
+- kontrolu stavu,
 - bezpečné ukončení procesu,
 - volitelné notifikace přes `RESPOND PREFIX="tgalarm"`.
 
-## Co umí
+## Instalace jako ZMOD plugin
 
-- `START_DRYING MATERIAL=<typ> TIME=<hodiny>`
-- Automatické nastavení teploty podle materiálu
-- Timer běžící každou sekundu (`delayed_gcode DRYING_TIMER`)
-- Navýšení `idle_timeout`, aby se tiskárna nevypnula během sušení
-- `DRYING_STATUS` pro kontrolu zbývajícího času
-- `STOP_DRYING` pro ruční nebo automatické ukončení
-- Zkratkové příkazy pro běžné materiály
+Níže je správný postup pro instalaci pluginu v ZMOD.
+
+### 1) Přidej plugin do `mod_data/user.moonraker.conf`
+
+Vlož sekci:
+
+```ini
+[update_manager dryer]
+type: git_repo
+channel: dev
+path: /root/printer_data/config/mod_data/plugins/dryer
+origin: https://github.com/pantata/dryer.git
+is_system_service: False
+primary_branch: main
+```
+
+- Plugin path: `/root/printer_data/config/mod_data/plugins/dryer`
+- Source: `https://github.com/pantata/dryer.git`
+
+
+### 2) Enable/Disable lifecycle skripty
+
+Povolení pluginu: `ENABLE_PLUGIN name=dryer`
+Zakázání pluginu: `DISABLE_PLUGIN name=dryer`
+
+
+## Použití maker
+
+### Spuštění sušení
+
+```gcode
+START_DRYING MATERIAL=PLA TIME=4
+```
+
+### Stav sušení
+
+```gcode
+DRYING_STATUS
+```
+
+### Zastavení sušení
+
+```gcode
+STOP_DRYING
+```
 
 ## Podporované materiály a výchozí teploty
 
@@ -28,81 +66,23 @@ Konfigurace je v souboru `dryer.cfg` a přidává:
 
 Pokud zadáš neznámý materiál, použije se fallback teplota `45 °C`.
 
-## Rychlé použití
+## Zkratky
 
-### 1) Přidej konfiguraci do Klipperu
+- `DRY_PLA` -> `START_DRYING MATERIAL=PLA TIME=4`
+- `DRY_PETG` -> `START_DRYING MATERIAL=PETG TIME=4`
+- `DRY_TPU` -> `START_DRYING MATERIAL=TPU TIME=6`
+- `DRY_ABS` -> `START_DRYING MATERIAL=ABS TIME=6`
 
-Do hlavního `printer.cfg` přidej include:
+## Bezpečnost logiky
 
-```ini
-[include dryer.cfg]
-```
-
-Pak proveď `RESTART` (nebo `FIRMWARE_RESTART`) v Klipperu.
-
-### 2) Spusť sušení
-
-Příklad pro PLA na 4 hodiny:
-
-```gcode
-START_DRYING MATERIAL=PLA TIME=4
-```
-
-### 3) Zobraz stav
-
-```gcode
-DRYING_STATUS
-```
-
-### 4) Zastav sušení
-
-```gcode
-STOP_DRYING
-```
-
-## Dostupné příkazy
-
-- `START_DRYING MATERIAL=<PLA|PETG|TPU|ABS> TIME=<hodiny>`
-  - `MATERIAL` je nepovinný (výchozí `PLA`)
-  - `TIME` je nepovinný (výchozí `4` hodiny)
-
-- `STOP_DRYING`
-  - vypne podložku (`M140 S0`)
-  - zastaví timer
-  - vrátí původní `idle_timeout`
-  - vynuluje interní proměnné
-
-- `DRYING_STATUS`
-  - ukáže zbývající čas do konce sušení
-
-- Zkratky:
-  - `DRY_PLA` → `START_DRYING MATERIAL=PLA TIME=4`
-  - `DRY_PETG` → `START_DRYING MATERIAL=PETG TIME=4`
-  - `DRY_TPU` → `START_DRYING MATERIAL=TPU TIME=6`
-  - `DRY_ABS` → `START_DRYING MATERIAL=ABS TIME=6`
-
-## Jak je řešená bezpečnost logiky
-
-Macro obsahuje základní ochrany:
+Makra obsahují základní ochrany:
 - nespustí nové sušení, pokud už běží,
 - nespustí sušení, pokud je podložka už aktivně používaná,
-- po dokončení automaticky vypne topení,
-- vrací původní `idle_timeout`.
-
-## Poznámka k notifikacím
-
-V `dryer.cfg` jsou použité zprávy:
-
-```gcode
-RESPOND PREFIX="tgalarm" MSG="..."
-```
-
-Pokud `tgalarm` ve své instalaci nepoužíváš, můžeš tyto řádky:
-- ponechat (budou jen ignorované, podle setupu), nebo
-- upravit/odstranit podle vlastního notifikačního systému.
+- po dokončení automaticky vypnou topení,
+- vrátí původní `idle_timeout`.
 
 ## Doporučení
 
 - Suš filament pouze pod dohledem a v bezpečném prostředí.
 - Ověř, že zvolená teplota je vhodná pro konkrétní značku materiálu.
-- Pro citlivé materiály začni kratším časem a podle výsledku uprav.
+- U citlivých materiálů začni kratším časem a uprav podle výsledku.
