@@ -12,26 +12,14 @@ Les macros sont definies dans `dryer.cfg` et offrent :
 
 ## Installation comme plugin ZMOD
 
-Utilise la procedure suivante pour installer le plugin dans ZMOD.
+Suis les etapes ci-dessous pour installer le plugin dans ZMOD.
 
-### 1) Ajouter le plugin a `mod_data/user.moonraker.conf`
+### 1) Activer le plugin dans ZMOD
 
-Ajoute cette section :
+Mets ZMod a jour.
+Execute la macro `ENABLE_EXTRA_PLUGINS`.
 
-```ini
-[update_manager dryer]
-type: git_repo
-channel: dev
-path: /root/printer_data/config/mod_data/plugins/dryer
-origin: https://github.com/pantata/dryer.git
-is_system_service: False
-primary_branch: master
-```
-
-- Chemin du plugin : `/root/printer_data/config/mod_data/plugins/dryer`
-- Source : `https://github.com/pantata/dryer.git`
-
-### 2) Activer/desactiver les scripts de cycle de vie
+### 2) Activer/desactiver le plugin
 
 Activer le plugin : `ENABLE_PLUGIN name=dryer`
 Desactiver le plugin : `DISABLE_PLUGIN name=dryer`

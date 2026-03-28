@@ -12,26 +12,14 @@ Makrolar `dryer.cfg` dosyasinda tanimlanmistir ve sunlari saglar:
 
 ## ZMOD eklentisi olarak kurulum
 
-Eklentiyi ZMOD'a kurmak icin asagidaki adimlari kullanin.
+Eklentiyi ZMOD'a kurmak icin asagidaki adimlari izleyin.
 
-### 1) Eklentiyi `mod_data/user.moonraker.conf` dosyasina ekleyin
+### 1) Eklentiyi ZMOD icinde etkinlestirin
 
-Su bolumu ekleyin:
+ZMod'u guncelleyin.
+`ENABLE_EXTRA_PLUGINS` makrosunu calistirin.
 
-```ini
-[update_manager dryer]
-type: git_repo
-channel: dev
-path: /root/printer_data/config/mod_data/plugins/dryer
-origin: https://github.com/pantata/dryer.git
-is_system_service: False
-primary_branch: master
-```
-
-- Eklenti yolu: `/root/printer_data/config/mod_data/plugins/dryer`
-- Kaynak: `https://github.com/pantata/dryer.git`
-
-### 2) Yasam dongusu betiklerini etkinlestirme/devre disi birakma
+### 2) Eklentiyi etkinlestirme/devre disi birakma
 
 Eklentiyi etkinlestir: `ENABLE_PLUGIN name=dryer`
 Eklentiyi devre disi birak: `DISABLE_PLUGIN name=dryer`

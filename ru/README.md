@@ -12,26 +12,14 @@
 
 ## Установка как плагина ZMOD
 
-Используйте следующую процедуру для установки плагина в ZMOD.
+Следуйте шагам ниже, чтобы установить плагин в ZMOD.
 
-### 1) Добавьте плагин в `mod_data/user.moonraker.conf`
+### 1) Включите плагин в ZMOD
 
-Добавьте этот раздел:
+Обновите ZMod.
+Запустите макрос `ENABLE_EXTRA_PLUGINS`.
 
-```ini
-[update_manager dryer]
-type: git_repo
-channel: dev
-path: /root/printer_data/config/mod_data/plugins/dryer
-origin: https://github.com/pantata/dryer.git
-is_system_service: False
-primary_branch: master
-```
-
-- Путь плагина: `/root/printer_data/config/mod_data/plugins/dryer`
-- Источник: `https://github.com/pantata/dryer.git`
-
-### 2) Включение/отключение lifecycle-скриптов
+### 2) Включение/отключение плагина
 
 Включить плагин: `ENABLE_PLUGIN name=dryer`
 Отключить плагин: `DISABLE_PLUGIN name=dryer`

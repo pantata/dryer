@@ -1,82 +1,70 @@
 # Dryer plugin pro ZMOD (Klipper)
 
-Tento projekt obsahuje Klipper makra pro suseni filamentu pomoci vyhrivane podlozky.
-Plugin je urcen pro tiskarnu Flashforge AD5X s nainstalovanym firmwarem ZMod: https://github.com/ghzserg/zmod
+Tento projekt obsahuje Klipper makra pro sušení filamentu pomocí vyhřívané podložky.
+Plugin je určen pro tiskárnu Flashforge AD5X s nainstalovaným firmwarem ZMod: https://github.com/ghzserg/zmod
 
-Makra jsou v souboru `dryer.cfg` a poskytuji:
-- spusteni suseni podle materialu a casu,
-- prubezne odpocitavani,
+Makra jsou v souboru `dryer.cfg` a poskytují:
+- spuštění sušení podle materiálu a času,
+- průběžné odpočítávání,
 - kontrolu stavu,
-- bezpecne ukonceni procesu,
-- volitelne notifikace pres `RESPOND PREFIX="tgalarm"`.
+- bezpečné ukončení procesu,
+- volitelné notifikace přes `RESPOND PREFIX="tgalarm"`.
 
 ## Instalace jako ZMOD plugin
 
-Nize je spravny postup pro instalaci pluginu v ZMOD.
+Níže postup pro instalaci pluginu v ZMOD
 
-### 1) Pridej plugin do `mod_data/user.moonraker.conf`
+### 1) Povol plugin v zmod
 
-Vloz sekci:
+Aktualizuj Zmod.
+Spusť makro ENABLE_EXTRA_PLUGINS
 
-```ini
-[update_manager dryer]
-type: git_repo
-channel: dev
-path: /root/printer_data/config/mod_data/plugins/dryer
-origin: https://github.com/pantata/dryer.git
-is_system_service: False
-primary_branch: master
-```
+### 2) Enable/Disable plugin
 
-- Plugin path: `/root/printer_data/config/mod_data/plugins/dryer`
-- Source: `https://github.com/pantata/dryer.git`
+Povolení pluginu: `ENABLE_PLUGIN name=dryer`
+Zakázání pluginu: `DISABLE_PLUGIN name=dryer`
 
-### 2) Enable/Disable lifecycle skripty
+## Alternativní instalace (bez pluginu)
 
-Povoleni pluginu: `ENABLE_PLUGIN name=dryer`
-Zakazani pluginu: `DISABLE_PLUGIN name=dryer`
+Pokud nechceš instalaci přes plugin, můžeš použít jen include konfigurace:
 
-## Alternativni instalace (bez pluginu)
-
-Pokud nechces instalaci pres plugin, muzes pouzit jen include konfigurace:
-
-1. Zkopiruj `dryer.cfg` do `mod_data` (typicky do `/root/printer_data/config/mod_data/`).
-2. Do `user.cfg` pridej:
+1. Zkopíruj `dryer.cfg` do `mod_data` (typicky do `/root/printer_data/config/mod_data/`).
+2. Do `user.cfg` přidej:
 
 ```ini
 [include dryer.cfg]
 ```
 
-3. Proved restart Klipperu (`RESTART` nebo `FIRMWARE_RESTART`).
+3. Proveď restart Klipperu (`RESTART` nebo `FIRMWARE_RESTART`).
 
-## Pouziti maker
+## Použití maker
 
-### Spusteni suseni
+### Spuštění sušení
 
 ```gcode
 START_DRYING MATERIAL=PLA TIME=4
 ```
 
-### Stav suseni
+### Stav sušení
 
 ```gcode
 DRYING_STATUS
 ```
 
-### Zastaveni suseni
+### Zastavení sušení
 
 ```gcode
 STOP_DRYING
 ```
 
-## Podporovane materialy a vychozi teploty
+## Podporované materiály a výchozí teploty
 
 - `PLA`: 45 °C
 - `PETG`: 65 °C
 - `TPU`: 50 °C
 - `ABS`: 80 °C
 
-Pokud zadas neznamy material, pouzije se fallback teplota `45 °C`.
+Pokud zadáš neznámý materiál, použije se fallback teplota `45 °C`.
 
 ## Zkratky
 
@@ -85,16 +73,16 @@ Pokud zadas neznamy material, pouzije se fallback teplota `45 °C`.
 - `DRY_TPU` -> `START_DRYING MATERIAL=TPU TIME=6`
 - `DRY_ABS` -> `START_DRYING MATERIAL=ABS TIME=6`
 
-## Bezpecnost logiky
+## Bezpečnost logiky
 
-Makra obsahuji zakladni ochrany:
-- nespusti nove suseni, pokud uz bezi,
-- nespusti suseni, pokud je podlozka uz aktivne pouzivana,
-- po dokonceni automaticky vypnou topeni,
-- vrati puvodni `idle_timeout`.
+Makra obsahují základní ochrany:
+- nespustí nové sušení, pokud už běží,
+- nespustí sušení, pokud je podložka už aktivně používaná,
+- po dokončení automaticky vypnou topení,
+- vrátí původní `idle_timeout`.
 
-## Doporuceni
+## Doporučení
 
-- Sus filament pouze pod dohledem a v bezpecnem prostredi.
-- Over, ze zvolena teplota je vhodna pro konkretni znacku materialu.
-- U citlivych materialu zacni kratsim casem a uprav podle vysledku.
+- Suš filament pouze pod dohledem a v bezpečném prostředí.
+- Ověř, že zvolená teplota je vhodná pro konkrétní značku materiálu.
+- U citlivých materiálů začni kratším časem a uprav podle výsledku.

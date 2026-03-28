@@ -12,26 +12,14 @@
 
 ## ZMOD プラグインとしてインストール
 
-ZMOD にプラグインをインストールするには、次の手順を使用します。
+ZMOD にプラグインをインストールするには、以下の手順に従ってください。
 
-### 1) `mod_data/user.moonraker.conf` にプラグインを追加
+### 1) ZMOD でプラグインを有効化
 
-次のセクションを追加します。
+ZMod を更新します。
+`ENABLE_EXTRA_PLUGINS` マクロを実行します。
 
-```ini
-[update_manager dryer]
-type: git_repo
-channel: dev
-path: /root/printer_data/config/mod_data/plugins/dryer
-origin: https://github.com/pantata/dryer.git
-is_system_service: False
-primary_branch: master
-```
-
-- プラグインのパス: `/root/printer_data/config/mod_data/plugins/dryer`
-- ソース: `https://github.com/pantata/dryer.git`
-
-### 2) ライフサイクルスクリプトの有効化/無効化
+### 2) プラグインの有効化/無効化
 
 プラグインを有効化: `ENABLE_PLUGIN name=dryer`
 プラグインを無効化: `DISABLE_PLUGIN name=dryer`

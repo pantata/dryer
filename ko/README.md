@@ -12,26 +12,14 @@
 
 ## ZMOD 플러그인으로 설치
 
-다음 절차에 따라 ZMOD에 플러그인을 설치하세요.
+아래 단계에 따라 ZMOD에 플러그인을 설치하세요.
 
-### 1) `mod_data/user.moonraker.conf`에 플러그인 추가
+### 1) ZMOD에서 플러그인 활성화
 
-다음 섹션을 추가하세요.
+ZMod를 업데이트하세요.
+`ENABLE_EXTRA_PLUGINS` 매크로를 실행하세요.
 
-```ini
-[update_manager dryer]
-type: git_repo
-channel: dev
-path: /root/printer_data/config/mod_data/plugins/dryer
-origin: https://github.com/pantata/dryer.git
-is_system_service: False
-primary_branch: master
-```
-
-- 플러그인 경로: `/root/printer_data/config/mod_data/plugins/dryer`
-- 소스: `https://github.com/pantata/dryer.git`
-
-### 2) 라이프사이클 스크립트 활성화/비활성화
+### 2) 플러그인 활성화/비활성화
 
 플러그인 활성화: `ENABLE_PLUGIN name=dryer`
 플러그인 비활성화: `DISABLE_PLUGIN name=dryer`
